@@ -1,24 +1,38 @@
-name: Run FizzBuzz Tests with unittest
-
+name: Tests with Docker
+ 
 on:
+  pull_request:
+    branches:
+      - docker
   push:
     branches:
-      - main
-  pull_request:
-  workflow_dispatch:
-
+      - docker
+ 
 jobs:
   test:
+    name: Run Unit Tests in Docker
     runs-on: ubuntu-latest
-
+ 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Run tests
-        run: python -m unittest discover test
+ 
+      - name: Build Docker Image
+        run: docker build -t fizzbuzz-test .
+ 
+      - name: Run Tests in Docker
+        run: docker run --rm fizzbuzz-test
+ 
+  build_image:
+    name: Build Docker Image (Only on Main)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+ 
+      - name: Build and save Docker image
+        run: |
+          docker build -t fizzbuzz-app .
+          docker save fizzbuzz-app > fizzbuzz.tar
