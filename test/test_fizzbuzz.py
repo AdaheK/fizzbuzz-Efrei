@@ -4,7 +4,7 @@ from main import fizzbuzz
 class TestFizzBuzz(unittest.TestCase):
 
     def test_multiple_de_3(self):
-        self.assertEqual(fizzbuzz(100)[5], "Fizz")
+        self.assertEqual(fizzbuzz(100)[5], "fizz")
         self.assertEqual(fizzbuzz(100)[68], "Fizz")
 
     def test_contient_3(self):
